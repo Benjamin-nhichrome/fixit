@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>FixIT</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav>
+    <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <% if (user.role === "admin") { %>
+        <a href="/admin">Admin</a>
+      <% } %>
+      <form action="/logout" method="post" style="display:inline;">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+        <button type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    <% } %>
+  </nav>
+  <main>

@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+<h1>Admin panel</h1>
+
+<table>
+  <tr><th>ID</th><th>Gebruiker</th><th>Categorie</th><th>Locatie</th><th>Status</th><th>Actie</th></tr>
+  <% items.forEach(m => { %>
+    <tr>
+      <td><%= m.melding_id %></td>
+      <td><%= m.name %> (<%= m.email %>)</td>
+      <td><%= m.categorie %></td>
+      <td><%= m.locatie %></td>
+      <td><%= m.status %></td>
+      <td>
+        <form method="post" action="/admin/melding/<%= m.melding_id %>/status">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <select name="status">
+            <option value="open" <%= m.status==="open"?"selected":"" %>>open</option>
+            <option value="in_behandeling" <%= m.status==="in_behandeling"?"selected":"" %>>in_behandeling</option>
+            <option value="opgelost" <%= m.status==="opgelost"?"selected":"" %>>opgelost</option>
+            <option value="gesloten" <%= m.status==="gesloten"?"selected":"" %>>gesloten</option>
+          </select>
+          <button>Update</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+<%- include("partials/footer") %>

@@ -1,0 +1,22 @@
+<%- include("partials/header") %>
+<h1>Login</h1>
+
+<% if (errors.length) { %>
+  <ul>
+    <% errors.forEach(e => { %><li><%= e %></li><% }) %>
+  </ul>
+<% } %>
+
+<form method="post" action="/login">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+  <label>Email</label>
+  <input name="email" type="email" required />
+
+  <label>Wachtwoord</label>
+  <input name="password" type="password" required />
+
+  <button>Login</button>
+</form>
+
+<p><a href="/register">Account maken</a></p>
+<%- include("partials/footer") %>

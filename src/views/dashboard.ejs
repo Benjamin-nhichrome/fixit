@@ -1,0 +1,19 @@
+<%- include("partials/header") %>
+<h1>Dashboard</h1>
+<p>Welkom, <%= user.name %></p>
+
+<p><a href="/melding/nieuw">+ Nieuwe melding</a></p>
+
+<h2>Mijn meldingen</h2>
+<table>
+  <tr><th>Datum</th><th>Categorie</th><th>Locatie</th><th>Status</th></tr>
+  <% items.forEach(m => { %>
+    <tr>
+      <td><%= new Date(m.datum_tijd).toLocaleString() %></td>
+      <td><%= m.categorie %></td>
+      <td><%= m.locatie %></td>
+      <td><%= m.status %></td>
+    </tr>
+  <% }) %>
+</table>
+<%- include("partials/footer") %>

@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+<h1>Nieuwe melding</h1>
+
+<% if (errors.length) { %>
+  <ul>
+    <% errors.forEach(e => { %><li><%= e %></li><% }) %>
+  </ul>
+<% } %>
+
+<form method="post" action="/melding/nieuw">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+
+  <label>Categorie</label>
+  <input name="categorie" required />
+
+  <label>Omschrijving</label>
+  <textarea name="omschrijving" required></textarea>
+
+  <label>Locatie</label>
+  <input name="locatie" required />
+
+  <button>Opslaan</button>
+</form>
+
+<%- include("partials/footer") %>

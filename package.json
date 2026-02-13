@@ -1,0 +1,13 @@
+{
+  "name": "fixit",
+  "version": "1.0.0",
+  "description": "FixIT meldingen systeem",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
