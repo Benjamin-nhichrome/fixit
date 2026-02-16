@@ -3,8 +3,11 @@ const db = require("../db");
 async function findByUserId(userId) {
   const [rows] = await db.query(
     `SELECT 
+        melding_id,
         DATE_FORMAT(datum_tijd, '%Y-%m-%d %H:%i') AS datum,
-        categorie, locatie, status
+        categorie,
+        locatie,
+        status
      FROM meldingen
      WHERE user_id = ?
      ORDER BY datum_tijd DESC`,
@@ -12,8 +15,6 @@ async function findByUserId(userId) {
   );
   return rows;
 }
-
-module.exports = { findByUserId };
 
 async function createMelding(userId, categorie, omschrijving, locatie) {
   await db.query(
@@ -23,16 +24,26 @@ async function createMelding(userId, categorie, omschrijving, locatie) {
   );
 }
 
-
 async function listAll() {
   const [rows] = await db.query(
-    "SELECT id, user_id, datum, categorie, locatie, status FROM meldingen ORDER BY datum DESC"
+    `SELECT 
+        melding_id,
+        user_id,
+        DATE_FORMAT(datum_tijd, '%Y-%m-%d %H:%i') AS datum,
+        categorie,
+        locatie,
+        status
+     FROM meldingen
+     ORDER BY datum_tijd DESC`
   );
   return rows;
 }
 
-async function updateStatus(id, status) {
-  await db.query("UPDATE meldingen SET status = ? WHERE id = ?", [status, id]);
+async function updateStatus(meldingId, status) {
+  await db.query(
+    "UPDATE meldingen SET status = ? WHERE melding_id = ?",
+    [status, meldingId]
+  );
 }
 
 module.exports = {
