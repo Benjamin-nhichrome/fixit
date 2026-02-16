@@ -5,15 +5,29 @@
 <p><a href="/melding/nieuw">+ Nieuwe melding</a></p>
 
 <h2>Mijn meldingen</h2>
-<table>
-  <tr><th>Datum</th><th>Categorie</th><th>Locatie</th><th>Status</th></tr>
-  <% items.forEach(m => { %>
+
+<% if (!meldingen || meldingen.length === 0) { %>
+  <p>Je hebt nog geen meldingen aangemaakt.</p>
+<% } else { %>
+  <table>
     <tr>
-      <td><%= new Date(m.datum_tijd).toLocaleString() %></td>
-      <td><%= m.categorie %></td>
-      <td><%= m.locatie %></td>
-      <td><%= m.status %></td>
+      <th>Datum</th>
+      <th>Categorie</th>
+      <th>Locatie</th>
+      <th>Status</th>
     </tr>
-  <% }) %>
-</table>
+
+    <% meldingen.forEach(melding => { %>
+      <tr>
+        <td><%= melding.datum %></td>
+        <td><%= melding.categorie %></td>
+        <td><%= melding.locatie %></td>
+        <td class="status status-<%= (melding.status || '').toLowerCase().replace(/\s+/g,'-') %>">
+          <%= melding.status %>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+<% } %>
+
 <%- include("partials/footer") %>
