@@ -1,10 +1,8 @@
 <%- include("partials/header") %>
 <h1>Login</h1>
 
-<% if (errors.length) { %>
-  <ul>
-    <% errors.forEach(e => { %><li><%= e %></li><% }) %>
-  </ul>
+<% if (error) { %>
+  <p style="color:red;"><%= error %></p>
 <% } %>
 
 <form method="post" action="/login">
