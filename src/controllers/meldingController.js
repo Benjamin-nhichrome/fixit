@@ -1,8 +1,8 @@
 const meldingen = require("../models/meldingModel");
 
 exports.dashboard = async (req, res) => {
-  const items = await meldingen.listByUser(req.session.user.user_id);
-  res.render("dashboard", { items });
+  const rows = await meldingen.listByUser(req.session.user.id);
+  res.render("dashboard", { meldingen: rows });
 };
 
 exports.showNew = (req, res) => res.render("melding_new", { errors: [] });

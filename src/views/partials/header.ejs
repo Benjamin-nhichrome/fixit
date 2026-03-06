@@ -1,24 +1,39 @@
 <!doctype html>
-<html>
+<html lang="nl">
 <head>
   <meta charset="utf-8" />
-  <title>FixIT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FixIT ServiceDesk</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <nav>
-    <% if (user) { %>
-      <a href="/dashboard">Dashboard</a>
-      <% if (user.role === "admin") { %>
-        <a href="/admin">Admin</a>
+  <nav class="topnav">
+    <div class="nav-left">
+      <a href="/" class="brand">FixIT</a>
+
+      <% if (user) { %>
+        <a href="/dashboard">Dashboard</a>
+        <% if (user.role === "admin") { %>
+          <a href="/admin">Admin</a>
+        <% } %>
       <% } %>
-      <form action="/logout" method="post" style="display:inline;">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-        <button type="submit">Logout</button>
-      </form>
-    <% } else { %>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-    <% } %>
+    </div>
+
+    <div class="nav-right">
+      <% if (user) { %>
+        <form action="/logout" method="post" class="logout-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <button type="submit">Logout</button>
+        </form>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      <% } %>
+    </div>
   </nav>
-  <main>
+
+  <main class="page-content">
+      
+  </main>
+</body>
+</html>
