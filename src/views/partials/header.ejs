@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="nl">
+<html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FixIT ServiceDesk</title>
+  <title>FixIT</title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
+
+<body class="<%= typeof page !== 'undefined' && page === 'login' ? 'login-page' : '' %>">
   <nav class="topnav">
     <div class="nav-left">
       <a href="/" class="brand">FixIT</a>

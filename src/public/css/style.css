@@ -5,14 +5,19 @@
   padding: 0;
 }
 
+/* default background (dashboard, admin) */
 body {
   font-family: Arial, sans-serif;
   min-height: 100vh;
-  background:
-    linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
-    url("/images/servicedesk-bg.jpg") no-repeat center center / cover;
-  color: #1e293b;
+  background: #f4f6f8;
   padding: 30px;
+}
+
+/* login page background */
+.login-page {
+  background:
+    linear-gradient(rgba(4, 69, 221, 0.55), rgba(15,23,42,0.55)),
+    url("/images/servicedesk-bg.png") no-repeat center center / cover;
 }
 
 /* Top navigation */
@@ -49,11 +54,11 @@ nav button:hover {
 
 /* Card */
 .card {
-  background: rgba(255, 255, 255, 0.97);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
 }
 
 /* Login card smaller */
@@ -265,9 +270,10 @@ tr:hover {
   align-items: center;
   gap: 16px;
   padding: 14px 22px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px);
   border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   margin-bottom: 30px;
 }
 
@@ -292,4 +298,57 @@ tr:hover {
 
 .page-content {
   width: 100%;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-actions select {
+  flex: 1;
+}
+
+.admin-actions button {
+  min-width: 110px;
+}
+
+.status-in_behandeling {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-opgelost,
+.status-gesloten {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0 24px;
+}
+
+.stat-box {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.stat-box h3 {
+  font-size: 15px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.stat-box p {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
 }

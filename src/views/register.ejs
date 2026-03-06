@@ -1,24 +1,41 @@
-<%- include("partials/header") %>
-<h1>Register</h1>
+<%- include("partials/header", { page: "login" }) %>
 
-<% if (error) { %>
-  <p style="color:red;"><%= error %></p>
-<% } %>
+<div class="container">
+  <div class="card auth-card">
+    <h1>📝 FixIT Account Registratie</h1>
+    <p>Maak een account om storingen te melden en tickets te volgen.</p>
 
-<form method="post" action="/register">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <% if (error) { %>
+      <div class="alert alert-error">
+        <%= error %>
+      </div>
+    <% } %>
 
-  <label>Naam</label>
-  <input name="name" type="text" required />
+    <form method="post" action="/register">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
 
-  <label>Email</label>
-  <input name="email" type="email" required />
+      <div>
+        <label for="name">Naam</label>
+        <input id="name" name="name" type="text" required />
+      </div>
 
-  <label>Wachtwoord</label>
-  <input name="password" type="password" required />
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+      </div>
 
-  <button>Account maken</button>
-</form>
+      <div>
+        <label for="password">Wachtwoord</label>
+        <input id="password" name="password" type="password" required />
+      </div>
 
-<p><a href="/login">Terug naar login</a></p>
+      <button type="submit">Account maken</button>
+    </form>
+
+    <p style="margin-top:16px;">
+      <a href="/login">Terug naar login</a>
+    </p>
+  </div>
+</div>
+
 <%- include("partials/footer") %>

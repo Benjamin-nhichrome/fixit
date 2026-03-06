@@ -1,28 +1,71 @@
 <%- include("partials/header") %>
-<h1>Admin panel</h1>
 
-<table>
-  <tr><th>ID</th><th>Gebruiker</th><th>Categorie</th><th>Locatie</th><th>Status</th><th>Actie</th></tr>
-  <% items.forEach(m => { %>
-    <tr>
-      <td><%= m.melding_id %></td>
-      <td><%= m.name %> (<%= m.email %>)</td>
-      <td><%= m.categorie %></td>
-      <td><%= m.locatie %></td>
-      <td><%= m.status %></td>
-      <td>
-        <form method="post" action="/admin/melding/<%= m.melding_id %>/status">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-          <select name="status">
-            <option value="open" <%= m.status==="open"?"selected":"" %>>open</option>
-            <option value="in_behandeling" <%= m.status==="in_behandeling"?"selected":"" %>>in_behandeling</option>
-            <option value="opgelost" <%= m.status==="opgelost"?"selected":"" %>>opgelost</option>
-            <option value="gesloten" <%= m.status==="gesloten"?"selected":"" %>>gesloten</option>
-          </select>
-          <button>Update</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
+<div class="container">
+  <div class="card">
+    <div class="dashboard-header">
+      <div>
+        <h1>Admin panel</h1>
+        <p>Beheer alle meldingen en pas de status aan.</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <h3>Open</h3>
+        <p><%= counts.open %></p>
+      </div>
+
+      <div class="stat-box">
+        <h3>In behandeling</h3>
+        <p><%= counts.in_behandeling %></p>
+      </div>
+
+      <div class="stat-box">
+        <h3>Opgelost</h3>
+        <p><%= counts.opgelost %></p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Gebruiker</th>
+          <th>Categorie</th>
+          <th>Locatie</th>
+          <th>Status</th>
+          <th>Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% items.forEach(m => { %>
+          <tr>
+            <td><%= m.melding_id %></td>
+            <td><%= m.name %> (<%= m.email %>)</td>
+            <td><%= m.categorie %></td>
+            <td><%= m.locatie %></td>
+            <td>
+              <span class="status status-<%= m.status %>">
+                <%= m.status %>
+              </span>
+            </td>
+            <td>
+              <form class="admin-actions" method="post" action="/admin/melding/<%= m.melding_id %>/status">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                <select name="status">
+                  <option value="open" <%= m.status==="open"?"selected":"" %>>open</option>
+                  <option value="in_behandeling" <%= m.status==="in_behandeling"?"selected":"" %>>in behandeling</option>
+                  <option value="opgelost" <%= m.status==="opgelost"?"selected":"" %>>opgelost</option>
+                  <option value="gesloten" <%= m.status==="gesloten"?"selected":"" %>>gesloten</option>
+                </select>
+                <button type="submit">Update</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <%- include("partials/footer") %>

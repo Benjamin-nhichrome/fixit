@@ -18,9 +18,15 @@ exports.create = async (req, res) => {
   res.redirect("/dashboard");
 };
 
-exports.adminPanel = async (req, res) => {
-  const items = await meldingen.listAll();
-  res.render("admin", { items });
+exports.adminPanel = async (req, res, next) => {
+  try {
+    const items = await meldingen.listAll();
+    const counts = await meldingen.getStatusCounts();
+
+    res.render("admin", { items, counts });
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.updateStatus = async (req, res) => {

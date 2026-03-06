@@ -33,20 +33,44 @@ async function createMelding(userId, categorie, omschrijving, locatie) {
   );
 }
 
-// 3) Admin: list all meldingen
+// 3) Admin: list all meldingen + user info
 async function listAll() {
   const [rows] = await db.query(
     `SELECT 
-        melding_id,
-        user_id,
-        DATE_FORMAT(datum_tijd, '%Y-%m-%d %H:%i') AS datum,
-        categorie,
-        locatie,
-        status
-     FROM meldingen
-     ORDER BY datum_tijd DESC`
+        m.melding_id,
+        m.user_id,
+        DATE_FORMAT(m.datum_tijd, '%Y-%m-%d %H:%i') AS datum,
+        m.categorie,
+        m.locatie,
+        m.status,
+        u.name,
+        u.email
+     FROM meldingen m
+     LEFT JOIN users u ON m.user_id = u.user_id
+     ORDER BY m.datum_tijd DESC`
   );
   return rows;
+}
+
+async function getStatusCounts() {
+  const [rows] = await db.query(`
+    SELECT status, COUNT(*) AS total
+    FROM meldingen
+    GROUP BY status
+  `);
+
+  const counts = {
+    open: 0,
+    in_behandeling: 0,
+    opgelost: 0,
+    gesloten: 0,
+  };
+
+  rows.forEach((row) => {
+    counts[row.status] = row.total;
+  });
+
+  return counts;
 }
 
 // 4) Admin: update status
@@ -57,11 +81,11 @@ async function updateStatus(meldingId, status) {
   );
 }
 
-// ✅ ONE export block only
 module.exports = {
   listByUser,
   findByUserId,
   createMelding,
   listAll,
   updateStatus,
+  getStatusCounts,
 };
