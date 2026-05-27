@@ -1,3 +1,4 @@
+<%# Loginpagina gebruikt header met page: "login" zodat login background actief wordt. %>
 <%- include("partials/header", { page: "login" }) %>
 
 <div class="container">
@@ -6,14 +7,18 @@
     <h1>💻 FixIT ServiceDesk</h1>
     <p>Log in om storingen te melden en tickets te beheren.</p>
 
+    <%# Toont foutmelding als login mislukt, bijvoorbeeld verkeerd wachtwoord. %>
     <% if (error) { %>
       <div class="alert alert-error">
         <%= error %>
       </div>
     <% } %>
 
+    <%# Login formulier stuurt email en wachtwoord naar POST /login. %>
     <form method="post" action="/login">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+
+      <%# CSRF token beschermt dit formulier. %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
       <div>
         <label for="email">Email</label>

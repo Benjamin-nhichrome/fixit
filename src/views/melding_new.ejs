@@ -1,25 +1,85 @@
+<%# Pagina voor het aanmaken van een nieuwe melding. %>
 <%- include("partials/header") %>
-<h1>Nieuwe melding</h1>
 
-<% if (errors.length) { %>
-  <ul>
-    <% errors.forEach(e => { %><li><%= e %></li><% }) %>
-  </ul>
-<% } %>
+<div class="container">
+  <div class="card form-card">
 
-<form method="post" action="/melding/nieuw">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+    <div class="dashboard-header">
+      <div>
+        <h1>Nieuwe melding</h1>
+        <p>Vul de gegevens in om een nieuwe storing of melding aan te maken.</p>
+      </div>
 
-  <label>Categorie</label>
-  <input name="categorie" required />
+      <%# Link terug naar het dashboard zonder iets op te slaan. %>
+      <a href="/dashboard" class="btn">Terug naar dashboard</a>
+    </div>
 
-  <label>Omschrijving</label>
-  <textarea name="omschrijving" required></textarea>
+    <%# Validatiefouten worden hier getoond. %>
+    <% if (errors && errors.length > 0) { %>
+      <div class="alert alert-error">
+        <% errors.forEach(error => { %>
+          <div><%= error %></div>
+        <% }) %>
+      </div>
+    <% } %>
 
-  <label>Locatie</label>
-  <input name="locatie" required />
+    <%# Formulier stuurt nieuwe melding naar POST /melding/nieuw. %>
+    <form method="post" action="/melding/nieuw">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
-  <button>Opslaan</button>
-</form>
+      <%# Categorie helpt admin om het type probleem te herkennen. %>
+      <div>
+        <label for="categorie">Categorie</label>
+        <select id="categorie" name="categorie" required>
+          <option value="">Kies een categorie</option>
+          <option value="hardware">Hardware</option>
+          <option value="software">Software</option>
+          <option value="netwerk">Netwerk</option>
+          <option value="account">Account</option>
+          <option value="overig">Overig</option>
+        </select>
+      </div>
+
+      <%# Omschrijving is de inhoud van de melding. %>
+      <div>
+        <label for="omschrijving">Omschrijving</label>
+        <textarea
+          id="omschrijving"
+          name="omschrijving"
+          placeholder="Beschrijf het probleem zo duidelijk mogelijk"
+          required
+        ></textarea>
+      </div>
+
+      <%# Locatie helpt support om te weten waar het probleem is. %>
+      <div>
+        <label for="locatie">Locatie</label>
+        <input
+          id="locatie"
+          name="locatie"
+          type="text"
+          placeholder="Bijv. Amsterdam, Kantoor 2"
+          required
+        />
+      </div>
+
+      <%# Prioriteit maakt duidelijk hoe urgent de melding is. %>
+      <div>
+        <label for="prioriteit">Prioriteit</label>
+        <select id="prioriteit" name="prioriteit">
+          <option value="laag">Laag</option>
+          <option value="normaal" selected>Normaal</option>
+          <option value="hoog">Hoog</option>
+          <option value="kritiek">Kritiek</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Opslaan</button>
+      </div>
+    </form>
+
+  </div>
+</div>
 
 <%- include("partials/footer") %>

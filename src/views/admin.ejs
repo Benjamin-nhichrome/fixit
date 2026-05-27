@@ -1,70 +1,166 @@
-<%- include("partials/header") %>
+<%# Admin panel. Alleen bereikbaar voor users met role = admin. %>
+<%- include("partials/header", { user: user, csrfToken: csrfToken }) %>
 
-<div class="container">
-  <div class="card">
-    <div class="dashboard-header">
-      <div>
-        <h1>Admin panel</h1>
-        <p>Beheer alle meldingen en pas de status aan.</p>
-      </div>
-    </div>
+<%# Flash bericht na status update of delete. %>
+<% if (typeof flash !== "undefined" && flash) { %>
+  <div class="alert alert-success">
+    <%= flash %>
+  </div>
+<% } %>
 
+<div class="admin-wrapper">
+  <div class="admin-card">
+
+    <h1>Admin panel</h1>
+    <p>Beheer alle meldingen en pas de status aan.</p>
+
+    <%# Statistiek cards bovenaan de admin pagina. %>
     <div class="stats-grid">
-      <div class="stat-box">
-        <h3>Open</h3>
-        <p><%= counts.open %></p>
+      <div class="stat-card">
+        <span>Open</span>
+        <strong><%= openCount || 0 %></strong>
       </div>
 
-      <div class="stat-box">
-        <h3>In behandeling</h3>
-        <p><%= counts.in_behandeling %></p>
+      <div class="stat-card">
+        <span>In behandeling</span>
+        <strong><%= inBehandelingCount || 0 %></strong>
       </div>
 
-      <div class="stat-box">
-        <h3>Opgelost</h3>
-        <p><%= counts.opgelost %></p>
+      <div class="stat-card">
+        <span>Opgelost</span>
+        <strong><%= opgelostCount || 0 %></strong>
       </div>
     </div>
 
-    <table>
+    <%# Admin tabel met alle meldingen van alle gebruikers. %>
+    <table class="admin-table">
       <thead>
         <tr>
           <th>ID</th>
           <th>Gebruiker</th>
           <th>Categorie</th>
+          <th>Omschrijving</th>
+          <th>Prioriteit</th>
           <th>Locatie</th>
           <th>Status</th>
           <th>Actie</th>
         </tr>
       </thead>
+
       <tbody>
-        <% items.forEach(m => { %>
+
+        <%# Empty state als er geen meldingen bestaan. %>
+        <% if (!meldingen || meldingen.length === 0) { %>
+
           <tr>
-            <td><%= m.melding_id %></td>
-            <td><%= m.name %> (<%= m.email %>)</td>
-            <td><%= m.categorie %></td>
-            <td><%= m.locatie %></td>
-            <td>
-              <span class="status status-<%= m.status %>">
-                <%= m.status %>
-              </span>
-            </td>
-            <td>
-              <form class="admin-actions" method="post" action="/admin/melding/<%= m.melding_id %>/status">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                <select name="status">
-                  <option value="open" <%= m.status==="open"?"selected":"" %>>open</option>
-                  <option value="in_behandeling" <%= m.status==="in_behandeling"?"selected":"" %>>in behandeling</option>
-                  <option value="opgelost" <%= m.status==="opgelost"?"selected":"" %>>opgelost</option>
-                  <option value="gesloten" <%= m.status==="gesloten"?"selected":"" %>>gesloten</option>
-                </select>
-                <button type="submit">Update</button>
-              </form>
+            <td colspan="8">
+              <div class="empty">
+                Er zijn momenteel geen meldingen.
+              </div>
             </td>
           </tr>
-        <% }) %>
+
+        <% } else { %>
+
+          <% meldingen.forEach(melding => { %>
+
+            <tr>
+              <td><%= melding.melding_id %></td>
+
+              <%# Naam en email van de gebruiker die de melding heeft aangemaakt. %>
+              <td>
+                <%= melding.name %> (<%= melding.email %>)
+              </td>
+
+              <td><%= melding.categorie %></td>
+              <td><%= melding.omschrijving %></td>
+
+              <%# Prioriteit badge. %>
+              <td>
+                <span class="priority priority-<%= melding.prioriteit %>">
+                  <%= (melding.prioriteit || "")
+                    .replace(/\b\w/g, c => c.toUpperCase()) %>
+                </span>
+              </td>
+
+              <td><%= melding.locatie %></td>
+
+              <%# Status badge. %>
+              <td>
+                <span class="status status-<%= (melding.status || '').toLowerCase().replace(/\s+/g, '-') %>">
+                  <%= (melding.status || "")
+                    .replace("_", " ")
+                    .replace(/\b\w/g, c => c.toUpperCase()) %>
+                </span>
+              </td>
+
+              <td>
+                <%# Formulier waarmee admin de status kan aanpassen. %>
+                <form
+                  action="/admin/melding/<%= melding.melding_id %>/status"
+                  method="POST"
+                  class="admin-actions"
+                >
+                  <input
+                    type="hidden"
+                    name="_csrf"
+                    value="<%= csrfToken %>"
+                  />
+
+                  <select name="status">
+                    <option value="open" <%= melding.status === "open" ? "selected" : "" %>>
+                      open
+                    </option>
+
+                    <option value="in_behandeling" <%= melding.status === "in_behandeling" ? "selected" : "" %>>
+                      in behandeling
+                    </option>
+
+                    <option value="opgelost" <%= melding.status === "opgelost" ? "selected" : "" %>>
+                      opgelost
+                    </option>
+
+                    <option value="gesloten" <%= melding.status === "gesloten" ? "selected" : "" %>>
+                      gesloten
+                    </option>
+                  </select>
+
+                  <button type="submit">
+                    Update
+                  </button>
+                </form>
+
+                <%# Delete formulier voor admin. Admin mag alle meldingen verwijderen. %>
+                <form
+                  action="/melding/<%= melding.melding_id %>/delete"
+                  method="POST"
+                  class="admin-actions"
+                >
+                  <input
+                    type="hidden"
+                    name="_csrf"
+                    value="<%= csrfToken %>"
+                  />
+
+                  <button
+                    type="submit"
+                    class="btn delete-btn"
+                    onclick="return confirm('Weet je zeker dat je deze melding wilt verwijderen?')"
+                  >
+                    Delete
+                  </button>
+                </form>
+
+              </td>
+            </tr>
+
+          <% }) %>
+
+        <% } %>
+
       </tbody>
     </table>
+
   </div>
 </div>
 

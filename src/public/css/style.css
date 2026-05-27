@@ -5,7 +5,7 @@
   padding: 0;
 }
 
-/* default background (dashboard, admin) */
+/* Default background */
 body {
   font-family: Arial, sans-serif;
   min-height: 100vh;
@@ -13,58 +13,97 @@ body {
   padding: 30px;
 }
 
-/* login page background */
+/* Login page background */
 .login-page {
   background:
-    linear-gradient(rgba(4, 69, 221, 0.55), rgba(15,23,42,0.55)),
+    linear-gradient(rgba(4, 69, 221, 0.55), rgba(15, 23, 42, 0.55)),
     url("/images/servicedesk-bg.png") no-repeat center center / cover;
 }
 
 /* Top navigation */
-nav {
+.topnav {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   margin-bottom: 30px;
 }
 
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand,
 nav a,
-nav button {
+nav button,
+.btn {
   text-decoration: none;
   background: #2563eb;
   color: white;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-radius: 8px;
   border: none;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
+.brand:hover,
 nav a:hover,
-nav button:hover {
+nav button:hover,
+.btn:hover {
   background: #1d4ed8;
+  color: white;
 }
 
-/* Page wrapper */
+.logout-form {
+  display: inline;
+  margin: 0;
+}
+
+.page-content {
+  width: 100%;
+}
+
+/* Layout */
 .container {
   max-width: 1100px;
   margin: 0 auto;
 }
 
-/* Card */
-.card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-  backdrop-filter: blur(6px);
+.admin-wrapper {
+  max-width: 1200px;
+  margin: 40px auto;
+  overflow-x: auto;
 }
 
-/* Login card smaller */
+/* Cards */
+.card,
+.admin-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+
 .auth-card {
   max-width: 480px;
   margin: 60px auto;
+}
+
+.form-card {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* Headings */
@@ -75,13 +114,13 @@ h1 {
 }
 
 h2 {
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 18px;
   color: #1e293b;
 }
 
 p {
-  color: #475569;
+  color: #64748b;
   margin-bottom: 20px;
 }
 
@@ -121,7 +160,7 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 140px;
   resize: vertical;
 }
 
@@ -144,69 +183,16 @@ button:hover,
   background: #1d4ed8;
 }
 
-/* Links */
-a {
-  color: #2563eb;
+/* Delete button */
+.delete-btn {
+  background: #dc2626;
 }
 
-a:hover {
-  color: #1d4ed8;
+.delete-btn:hover {
+  background: #b91c1c;
 }
 
-/* Tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 20px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-}
-
-th,
-td {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e2e8f0;
-  text-align: left;
-}
-
-th {
-  background: #0f172a;
-  color: white;
-  font-weight: 600;
-}
-
-tr:hover {
-  background: #f8fafc;
-}
-
-/* Status badges */
-.status {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 13px;
-}
-
-.status-open {
-  background: #ffedd5;
-  color: #d97706;
-}
-
-.status-in-behandeling {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.status-afgehandeld,
-.status-closed {
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-/* Dashboard blocks */
+/* Dashboard */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -216,13 +202,124 @@ tr:hover {
   flex-wrap: wrap;
 }
 
-.dashboard-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+/* Stats cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
 }
 
-/* Message boxes */
+.stat-card {
+  border: 1px solid #e5e7eb;
+  border-top: 4px solid #2563eb;
+  border-radius: 14px;
+  padding: 24px;
+  background: #f9fafb;
+}
+
+.stat-card span {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.stat-card strong {
+  font-size: 34px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Tables */
+table,
+.admin-table {
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+thead,
+.admin-table thead {
+  background: #0f172a;
+  color: white;
+}
+
+th,
+td {
+  padding: 18px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  font-weight: 700;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+thead th {
+  background: #0f172a;
+  color: white;
+}
+
+/* Admin actions */
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 170px;
+}
+
+.admin-actions select,
+.admin-actions button {
+  width: 100%;
+}
+
+.admin-actions button {
+  padding: 10px 14px;
+}
+
+/* Status badges */
+.status {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.status-open {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.status-in-behandeling,
+.status-in_behandeling {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-opgelost {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-gesloten {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Alerts */
 .alert {
   padding: 14px 16px;
   border-radius: 10px;
@@ -240,115 +337,152 @@ tr:hover {
   color: #166534;
 }
 
+/* Empty state */
+.empty {
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  margin-top: 10px;
+  color: #64748b;
+}
+
+/* Form actions */
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  min-width: 160px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   body {
     padding: 16px;
   }
 
-  .card {
+  .topnav {
+    flex-wrap: wrap;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-wrap: wrap;
+  }
+
+  .card,
+  .admin-card {
     padding: 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table,
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    font-size: 14px;
   }
 
   h1 {
     font-size: 26px;
   }
 
-  table,
-  th,
-  td {
-    font-size: 14px;
+  .form-actions {
+    justify-content: stretch;
   }
 
-  nav {
-    flex-wrap: wrap;
+  .form-actions button {
+    width: 100%;
   }
-}
-.topnav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 22px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(6px);
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  margin-bottom: 30px;
+
+  button.delete-btn,
+.btn.delete-btn {
+  background: #dc2626 !important;
 }
 
-.nav-left,
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+button.delete-btn:hover,
+.btn.delete-btn:hover {
+  background: #b91c1c !important;
 }
 
-.brand {
+.priority {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
   font-weight: 700;
-  font-size: 18px;
-  color: #0f172a;
-  text-decoration: none;
+  font-size: 13px;
 }
 
-.logout-form {
-  display: inline;
-  margin: 0;
+.priority-laag {
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
-.page-content {
-  width: 100%;
+.priority-normaal {
+  background: #e5e7eb;
+  color: #374151;
 }
 
-.admin-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.priority-hoog {
+  background: #fef3c7;
+  color: #b45309;
 }
 
-.admin-actions select {
-  flex: 1;
+.priority-kritiek {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
-.admin-actions button {
-  min-width: 110px;
 }
 
-.status-in_behandeling {
-  background: #dbeafe;
-  color: #2563eb;
+/* ==========================================================
+   Extra uitleg / overrides
+   Deze regels staan helemaal onderaan zodat ze de algemene
+   button styling kunnen overschrijven.
+   ========================================================== */
+
+/* Delete knoppen zijn rood omdat delete een gevaarlijke actie is. */
+button.delete-btn,
+.btn.delete-btn {
+  background: #dc2626 !important;
 }
 
-.status-opgelost,
-.status-gesloten {
-  background: #dcfce7;
-  color: #16a34a;
+button.delete-btn:hover,
+.btn.delete-btn:hover {
+  background: #b91c1c !important;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin: 20px 0 24px;
-}
-
-.stat-box {
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
-}
-
-.stat-box h3 {
-  font-size: 15px;
-  color: #475569;
-  margin-bottom: 8px;
-}
-
-.stat-box p {
-  font-size: 30px;
+/* Prioriteit badges voor laag/normaal/hoog/kritiek. */
+.priority {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0;
+  font-size: 13px;
+}
+
+.priority-laag {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.priority-normaal {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.priority-hoog {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.priority-kritiek {
+  background: #fee2e2;
+  color: #b91c1c;
 }

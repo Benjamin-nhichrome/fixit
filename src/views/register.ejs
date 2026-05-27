@@ -1,18 +1,22 @@
+<%# Registratiepagina gebruikt dezelfde login achtergrond. %>
 <%- include("partials/header", { page: "login" }) %>
 
 <div class="container">
   <div class="card auth-card">
+
     <h1>📝 FixIT Account Registratie</h1>
     <p>Maak een account om storingen te melden en tickets te volgen.</p>
 
+    <%# Toont foutmelding als registratie mislukt, bijvoorbeeld email bestaat al. %>
     <% if (error) { %>
       <div class="alert alert-error">
         <%= error %>
       </div>
     <% } %>
 
+    <%# Registratieformulier maakt een nieuwe user aan via POST /register. %>
     <form method="post" action="/register">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
       <div>
         <label for="name">Naam</label>
@@ -35,6 +39,7 @@
     <p style="margin-top:16px;">
       <a href="/login">Terug naar login</a>
     </p>
+
   </div>
 </div>
 

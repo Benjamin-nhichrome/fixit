@@ -1,33 +1,106 @@
+<%# Dashboard voor normale gebruikers. Toont alleen eigen meldingen. %>
 <%- include("partials/header") %>
-<h1>Dashboard</h1>
-<p>Welkom, <%= user.name %></p>
 
-<p><a href="/melding/nieuw">+ Nieuwe melding</a></p>
-
-<h2>Mijn meldingen</h2>
-
-<% if (!meldingen || meldingen.length === 0) { %>
-  <p>Je hebt nog geen meldingen aangemaakt.</p>
-<% } else { %>
-  <table>
-    <tr>
-      <th>Datum</th>
-      <th>Categorie</th>
-      <th>Locatie</th>
-      <th>Status</th>
-    </tr>
-
-    <% meldingen.forEach(melding => { %>
-      <tr>
-        <td><%= melding.datum %></td>
-        <td><%= melding.categorie %></td>
-        <td><%= melding.locatie %></td>
-        <td class="status status-<%= (melding.status || '').toLowerCase().replace(/\s+/g,'-') %>">
-          <%= melding.status %>
-        </td>
-      </tr>
-    <% }) %>
-  </table>
+<%# Flash bericht, bijvoorbeeld na verwijderen of aanmaken van melding. %>
+<% if (typeof flash !== "undefined" && flash) { %>
+  <div class="alert alert-success">
+    <%= flash %>
+  </div>
 <% } %>
+
+<div class="container">
+  <div class="dashboard-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welkom, <%= user.name %></p>
+    </div>
+
+    <%# Knop om naar het formulier voor een nieuwe melding te gaan. %>
+    <a href="/melding/nieuw" class="btn">
+      + Nieuwe melding
+    </a>
+  </div>
+
+  <div class="card">
+    <h2>Mijn meldingen</h2>
+
+    <%# Als user nog geen meldingen heeft, tonen we een lege state. %>
+    <% if (!meldingen || meldingen.length === 0) { %>
+
+      <p class="empty">
+        Je hebt nog geen meldingen aangemaakt.
+      </p>
+
+    <% } else { %>
+
+      <%# Tabel met meldingen van de ingelogde gebruiker. %>
+      <table>
+        <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Categorie</th>
+            <th>Prioriteit</th>
+            <th>Locatie</th>
+            <th>Status</th>
+            <th>Actie</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% meldingen.forEach(melding => { %>
+
+            <tr>
+              <td><%= melding.datum %></td>
+              <td><%= melding.categorie %></td>
+
+              <%# Prioriteit krijgt een eigen badge kleur via CSS. %>
+              <td>
+                <span class="priority priority-<%= melding.prioriteit %>">
+                  <%= (melding.prioriteit || "")
+                    .replace(/\b\w/g, c => c.toUpperCase()) %>
+                </span>
+              </td>
+
+              <td><%= melding.locatie %></td>
+
+              <%# Status wordt netjes weergegeven, bijvoorbeeld in_behandeling -> In Behandeling. %>
+              <td>
+                <span class="status status-<%= (melding.status || '').toLowerCase().replace(/\s+/g,'-') %>">
+                  <%= (melding.status || "")
+                    .replace("_", " ")
+                    .replace(/\b\w/g, c => c.toUpperCase()) %>
+                </span>
+              </td>
+
+              <td>
+                <%# Delete formulier met CSRF bescherming en confirm popup. %>
+                <form
+                  action="/melding/<%= melding.melding_id %>/delete"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="_csrf"
+                    value="<%= csrfToken %>"
+                  />
+
+                  <button
+                    type="submit"
+                    class="btn delete-btn"
+                    onclick="return confirm('Weet je zeker dat je deze melding wilt verwijderen?')"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+
+          <% }) %>
+        </tbody>
+      </table>
+
+    <% } %>
+  </div>
+</div>
 
 <%- include("partials/footer") %>

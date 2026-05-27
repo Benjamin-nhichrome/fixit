@@ -1,6 +1,11 @@
+// Database connectie.
 const db = require("../config/db");
 
-// 1) User dashboard: list meldingen for logged-in user
+/*
+  listByUser:
+  Haalt alle meldingen op van één specifieke gebruiker.
+  Dit wordt gebruikt op het dashboard.
+*/
 async function listByUser(userId) {
   const [rows] = await db.query(
     `SELECT 
@@ -10,30 +15,44 @@ async function listByUser(userId) {
         categorie,
         omschrijving,
         locatie,
+        prioriteit,
         status
      FROM meldingen
      WHERE user_id = ?
      ORDER BY datum_tijd DESC`,
     [userId]
   );
+
   return rows;
 }
 
-// Alias if some parts of your code call findByUserId
+/*
+  findByUserId:
+  Alias voor listByUser.
+  Dit is handig als andere code deze naam gebruikt.
+*/
 async function findByUserId(userId) {
   return listByUser(userId);
 }
 
-// 2) Create melding/ticket
-async function createMelding(userId, categorie, omschrijving, locatie) {
+/*
+  createMelding:
+  Maakt een nieuwe melding/ticket aan.
+  Elke melding wordt gekoppeld aan de ingelogde gebruiker via user_id.
+*/
+async function createMelding(userId, categorie, omschrijving, locatie, prioriteit = "normaal") {
   await db.query(
-    `INSERT INTO meldingen (user_id, categorie, omschrijving, locatie, status, datum_tijd)
-     VALUES (?, ?, ?, ?, 'open', NOW())`,
-    [userId, categorie, omschrijving, locatie]
+    `INSERT INTO meldingen (user_id, categorie, omschrijving, locatie, prioriteit, status, datum_tijd)
+     VALUES (?, ?, ?, ?, ?, 'open', NOW())`,
+    [userId, categorie, omschrijving, locatie, prioriteit]
   );
 }
 
-// 3) Admin: list all meldingen + user info
+/*
+  listAll:
+  Haalt alle meldingen op voor het admin panel.
+  Door de JOIN met users kan admin ook naam en email van de melder zien.
+*/
 async function listAll() {
   const [rows] = await db.query(
     `SELECT 
@@ -41,7 +60,9 @@ async function listAll() {
         m.user_id,
         DATE_FORMAT(m.datum_tijd, '%Y-%m-%d %H:%i') AS datum,
         m.categorie,
+        m.omschrijving,
         m.locatie,
+        m.prioriteit,
         m.status,
         u.name,
         u.email
@@ -49,9 +70,15 @@ async function listAll() {
      LEFT JOIN users u ON m.user_id = u.user_id
      ORDER BY m.datum_tijd DESC`
   );
+
   return rows;
 }
 
+/*
+  getStatusCounts:
+  Telt hoeveel meldingen er zijn per status.
+  Dit wordt gebruikt voor de statistiek-cards bovenaan de admin pagina.
+*/
 async function getStatusCounts() {
   const [rows] = await db.query(`
     SELECT status, COUNT(*) AS total
@@ -59,6 +86,7 @@ async function getStatusCounts() {
     GROUP BY status
   `);
 
+  // Startwaarde zodat de admin pagina altijd 0 kan tonen als er geen meldingen zijn.
   const counts = {
     open: 0,
     in_behandeling: 0,
@@ -73,11 +101,33 @@ async function getStatusCounts() {
   return counts;
 }
 
-// 4) Admin: update status
+/*
+  updateStatus:
+  Admin kan de status van een melding aanpassen.
+*/
 async function updateStatus(meldingId, status) {
   await db.query(
     "UPDATE meldingen SET status = ? WHERE melding_id = ?",
     [status, meldingId]
+  );
+}
+
+/*
+  deleteMelding:
+  - Admin mag elke melding verwijderen.
+  - Normale gebruiker mag alleen zijn eigen melding verwijderen.
+*/
+async function deleteMelding(meldingId, userId, isAdmin) {
+  if (isAdmin) {
+    return db.query(
+      "DELETE FROM meldingen WHERE melding_id = ?",
+      [meldingId]
+    );
+  }
+
+  return db.query(
+    "DELETE FROM meldingen WHERE melding_id = ? AND user_id = ?",
+    [meldingId, userId]
   );
 }
 
@@ -88,4 +138,5 @@ module.exports = {
   listAll,
   updateStatus,
   getStatusCounts,
+  deleteMelding,
 };

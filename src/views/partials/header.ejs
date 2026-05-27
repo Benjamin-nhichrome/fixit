@@ -3,16 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <title>FixIT</title>
+
+  <%# Laadt de centrale CSS file voor alle pagina's. %>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 
+<%# 
+  Als page === "login", krijgt body de class login-page.
+  Daardoor krijgen login/register een andere achtergrondafbeelding.
+%>
 <body class="<%= typeof page !== 'undefined' && page === 'login' ? 'login-page' : '' %>">
+
+  <%# Bovenste navigatiebalk. %>
   <nav class="topnav">
     <div class="nav-left">
+
+      <%# Logo/merknaam. Klikken gaat naar "/" en die route stuurt door naar login. %>
       <a href="/" class="brand">FixIT</a>
 
+      <%# Als user bestaat, is iemand ingelogd. Dan tonen we Dashboard. %>
       <% if (user) { %>
         <a href="/dashboard">Dashboard</a>
+
+        <%# Alleen admins zien de Admin knop. Normale users zien deze niet. %>
         <% if (user.role === "admin") { %>
           <a href="/admin">Admin</a>
         <% } %>
@@ -21,19 +34,22 @@
 
     <div class="nav-right">
       <% if (user) { %>
+
+        <%# Logout is een POST formulier, beschermd met CSRF token. %>
         <form action="/logout" method="post" class="logout-form">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <button type="submit">Logout</button>
         </form>
+
       <% } else { %>
+
+        <%# Als er niemand is ingelogd, tonen we Login en Register. %>
         <a href="/login">Login</a>
         <a href="/register">Register</a>
+
       <% } %>
     </div>
   </nav>
 
+  <%# Alle pagina-inhoud komt in deze main tag. Footer sluit deze tag af. %>
   <main class="page-content">
-      
-  </main>
-</body>
-</html>
