@@ -46,7 +46,7 @@ exports.create = async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/login");
   }
-
+  
   // Maakt melding aan en koppelt die aan req.session.user.id.
   await meldingen.createMelding(
     req.session.user.id,
