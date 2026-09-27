@@ -1,0 +1,627 @@
+/* =========================
+   FIXIT - GENERAL
+========================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+
+    --background: #f5f7fb;
+    --surface: #ffffff;
+
+    --text: #172033;
+    --text-light: #667085;
+
+    --border: #e4e7ec;
+
+    --success: #16803c;
+    --success-bg: #ecfdf3;
+
+    --danger: #b42318;
+    --danger-bg: #fef3f2;
+
+    --warning: #b54708;
+    --warning-bg: #fffaeb;
+
+    --shadow:
+        0 4px 16px rgba(16, 24, 40, 0.06);
+
+    --radius: 12px;
+}
+
+body {
+    min-height: 100vh;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.5;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.main-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.header-container {
+    width: min(1180px, calc(100% - 40px));
+    min-height: 72px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: var(--text);
+    text-decoration: none;
+}
+
+.brand:hover {
+    text-decoration: none;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--primary);
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.brand-text {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.brand-text span {
+    color: var(--primary);
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+
+    text-align: right;
+}
+
+.user-info span {
+    color: var(--text-light);
+    font-size: 13px;
+}
+
+
+/* =========================
+   PAGE LAYOUT
+========================= */
+
+.main-content {
+    width: min(1180px, calc(100% - 40px));
+
+    min-height: calc(100vh - 145px);
+
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin-bottom: 6px;
+
+    font-size: 30px;
+}
+
+.page-header p {
+    color: var(--text-light);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    padding: 24px;
+}
+
+.card-title {
+    margin-bottom: 20px;
+
+    font-size: 20px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+
+    padding: 9px 16px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font: inherit;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.btn:hover {
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-outline {
+    background: #ffffff;
+
+    color: var(--text);
+
+    border-color: var(--border);
+}
+
+.btn-outline:hover {
+    background: #f9fafb;
+}
+
+
+/* =========================
+   FORMS
+========================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    background: #ffffff;
+    color: var(--text);
+
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+
+    font: inherit;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    outline: 3px solid rgba(37, 99, 235, 0.12);
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+
+/* =========================
+   ALERTS
+========================= */
+
+.alert {
+    margin-bottom: 24px;
+    padding: 14px 16px;
+
+    border-radius: 8px;
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.alert-danger {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+.alert ul {
+    margin-top: 8px;
+    padding-left: 20px;
+}
+
+
+/* =========================
+   TABLES
+========================= */
+
+.table-wrapper {
+    overflow-x: auto;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+}
+
+.ticket-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.ticket-table th,
+.ticket-table td {
+    padding: 15px 18px;
+
+    border-bottom: 1px solid var(--border);
+
+    text-align: left;
+    vertical-align: middle;
+}
+
+.ticket-table th {
+    background: #f9fafb;
+
+    color: var(--text-light);
+
+    font-size: 12px;
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+}
+
+.ticket-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.ticket-table tbody tr:hover {
+    background: #fafbfc;
+}
+
+
+/* =========================
+   STATUS BADGES
+========================= */
+
+.badge {
+    display: inline-flex;
+
+    padding: 4px 9px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-open {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.badge-closed {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.badge-low {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.badge-normal {
+    background: #eff8ff;
+    color: #175cd3;
+}
+
+.badge-urgent {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 28px;
+}
+
+.dashboard-top h1 {
+    margin-bottom: 5px;
+}
+
+.dashboard-top p {
+    color: var(--text-light);
+}
+
+.empty-state {
+    padding: 50px 20px;
+
+    text-align: center;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.empty-state h2 {
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+
+    color: var(--text-light);
+}
+
+
+/* =========================
+   TICKET DETAILS
+========================= */
+
+.ticket-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(250px, 1fr);
+
+    gap: 24px;
+}
+
+.detail-list {
+    display: grid;
+
+    gap: 18px;
+}
+
+.detail-item {
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.detail-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-layout {
+    min-height: calc(100vh - 225px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: min(440px, 100%);
+
+    background: var(--surface);
+
+    padding: 36px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    box-shadow: var(--shadow);
+}
+
+.login-card h1 {
+    margin-bottom: 8px;
+
+    text-align: center;
+}
+
+.login-subtitle {
+    margin-bottom: 28px;
+
+    color: var(--text-light);
+
+    text-align: center;
+}
+
+.login-card .btn {
+    width: 100%;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.main-footer {
+    background: var(--surface);
+
+    border-top: 1px solid var(--border);
+}
+
+.footer-container {
+    width: min(1180px, calc(100% - 40px));
+    min-height: 72px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 760px) {
+
+    .header-container,
+    .dashboard-top,
+    .footer-container {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .header-container {
+        padding: 16px 0;
+    }
+
+    .header-user {
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .user-info {
+        text-align: left;
+    }
+
+    .main-content {
+        padding: 28px 0;
+    }
+
+    .dashboard-top {
+        gap: 14px;
+    }
+
+    .ticket-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-container {
+        padding: 20px 0;
+    }
+
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
