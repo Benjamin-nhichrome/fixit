@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../app/config/config.php';
 require_once __DIR__ . '/../app/config/database.php';
+require_once __DIR__ . '/../app/functions/helpers.php';
 
 if (isset($_SESSION['user'])) {
     if ($_SESSION['user']['role'] === 'admin') {
@@ -16,52 +17,65 @@ if (isset($_SESSION['user'])) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $csrfToken = $_POST['csrf_token'] ?? '';
 
-    if ($email === '' || $password === '') {
-        $error = 'Vul je e-mailadres en wachtwoord in.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Vul een geldig e-mailadres in.';
+    if (!verifyCsrfToken($csrfToken)) {
+        $error = 'Ongeldig verzoek. Probeer het opnieuw.';
     } else {
-        $stmt = $pdo->prepare(
-            'SELECT id, name, email, password, role
-             FROM users
-             WHERE email = :email
-             LIMIT 1'
-        );
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
 
-        $stmt->execute([
-            'email' => $email
-        ]);
+        if ($email === '' || $password === '') {
+            $error = 'Vul je e-mailadres en wachtwoord in.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Vul een geldig e-mailadres in.';
+        } else {
+            $stmt = $pdo->prepare(
+                'SELECT id, name, email, password, role
+                 FROM users
+                 WHERE email = :email
+                 LIMIT 1'
+            );
 
-        $user = $stmt->fetch();
+            $stmt->execute([
+                'email' => $email
+            ]);
 
-        if ($user && password_verify($password, $user['password'])) {
-            session_regenerate_id(true);
+            $user = $stmt->fetch();
 
-            $_SESSION['user'] = [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'email' => $user['email'],
-                'role' => $user['role']
-            ];
+            if ($user && password_verify($password, $user['password'])) {
+                session_regenerate_id(true);
 
-            if ($user['role'] === 'admin') {
-                header('Location: ' . BASE_URL . '/admin/dashboard.php');
-            } else {
-                header('Location: ' . BASE_URL . '/dashboard.php');
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'role' => $user['role']
+                ];
+
+                if ($user['role'] === 'admin') {
+                    header(
+                        'Location: '
+                        . BASE_URL
+                        . '/admin/dashboard.php'
+                    );
+                } else {
+                    header(
+                        'Location: '
+                        . BASE_URL
+                        . '/dashboard.php'
+                    );
+                }
+
+                exit;
             }
 
-            exit;
+            $error = 'E-mailadres of wachtwoord is onjuist.';
         }
-
-        $error = 'E-mailadres of wachtwoord is onjuist.';
     }
 }
-?>
 
-<?php
+$csrfToken = generateCsrfToken();
 
 $pageTitle = 'Inloggen';
 
@@ -82,18 +96,20 @@ require_once __DIR__ . '/../app/includes/header.php';
         <?php if ($error !== ''): ?>
 
             <div class="alert alert-danger">
-                <?= htmlspecialchars(
-                    $error,
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
+                <?= escape($error) ?>
             </div>
 
         <?php endif; ?>
 
         <form method="POST" action="">
 
-            <div class="form-group">
+    <input
+        type="hidden"
+        name="csrf_token"
+        value="<?= escape($csrfToken) ?>"
+    >
+
+    <div class="form-group"></div>
 
                 <label for="email">
                     E-mailadres
