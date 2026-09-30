@@ -16,5 +16,8 @@ $options = [
 try {
     $pdo = new PDO($dsn, $username, $password, $options);
 } catch (PDOException $e) {
-    die('Database connection failed.');
+    error_log('Database connection error: ' . $e->getMessage());
+
+    http_response_code(500);
+    exit('Er is een probleem met de databaseverbinding. Probeer het later opnieuw.');
 }
