@@ -42,8 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($description === '') {
-        $errors[] = 'Omschrijving is verplicht.';
-    }
+    $errors[] = 'Omschrijving is verplicht.';
+} elseif (strlen($description) > 2000) {
+    $errors[] = 'Omschrijving mag maximaal 2000 tekens bevatten.';
+}
 
     if (!in_array($category, $allowedCategories, true)) {
         $errors[] = 'Selecteer een geldige categorie.';
@@ -202,6 +204,7 @@ require_once __DIR__ . '/../app/includes/header.php';
                 class="form-control"
                 id="description"
                 name="description"
+                maxlength="2000"
                 placeholder="Beschrijf het probleem zo duidelijk mogelijk..."
                 required
             ><?= escape($description) ?></textarea>
