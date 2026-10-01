@@ -63,12 +63,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Selecteer een geldige status.';
     }
 
-    if (!in_array($priority, $allowedPriorities, true)) {
-        $errors[] = 'Selecteer een geldige prioriteit.';
-    }
+if (!in_array($priority, $allowedPriorities, true)) {
+    $errors[] = 'Selecteer een geldige prioriteit.';
+}
 
-    if (empty($errors)) {
-        $updateStmt = $pdo->prepare(
+if (strlen($adminNote) > 2000) {
+    $errors[] = 'Oplossing / notitie mag maximaal 2000 tekens bevatten.';
+}
+
+if (empty($errors)) {
+    $updateStmt = $pdo->prepare(
             'UPDATE tickets
              SET
                 status = :status,
@@ -287,11 +291,12 @@ require_once __DIR__ . '/../../app/includes/header.php';
                     </label>
 
                     <textarea
-                        class="form-control"
-                        id="admin_note"
-                        name="admin_note"
-                        placeholder="Beschrijf de oplossing of voeg een notitie toe..."
-                    ><?= escape($ticket['admin_note'] ?? '') ?></textarea>
+    class="form-control"
+    id="admin_note"
+    name="admin_note"
+    maxlength="2000"
+    placeholder="Beschrijf de oplossing of voeg een notitie toe..."
+><?= escape($ticket['admin_note'] ?? '') ?></textarea>
                 </div>
 
                 <div class="form-actions">
