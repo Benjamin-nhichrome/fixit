@@ -88,18 +88,6 @@ require_once __DIR__ . '/../../app/includes/header.php';
 
                 <?php foreach ($tickets as $ticket): ?>
 
-                    <?php
-                    $statusClass = $ticket['status'] === 'Open'
-                        ? 'badge-open'
-                        : 'badge-closed';
-
-                    $priorityClass = match ($ticket['priority']) {
-                        'Low' => 'badge-low',
-                        'Urgent' => 'badge-urgent',
-                        default => 'badge-normal'
-                    };
-                    ?>
-
                     <tr>
 
                         <td>
@@ -127,13 +115,21 @@ require_once __DIR__ . '/../../app/includes/header.php';
                         </td>
 
                         <td>
-                            <span class="badge <?= $statusClass ?>">
+                            <span
+                                class="badge <?= getStatusBadgeClass(
+                                    $ticket['status']
+                                ) ?>"
+                            >
                                 <?= escape($ticket['status']) ?>
                             </span>
                         </td>
 
                         <td>
-                            <span class="badge <?= $priorityClass ?>">
+                            <span
+                                class="badge <?= getPriorityBadgeClass(
+                                    $ticket['priority']
+                                ) ?>"
+                            >
                                 <?= escape($ticket['priority']) ?>
                             </span>
                         </td>
