@@ -83,4 +83,4 @@ $isLoggedIn = isset($_SESSION['user']);
 
 </header>
 
-<main class="main-content"></main>
+<main class="main-content">
