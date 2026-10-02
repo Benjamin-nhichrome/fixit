@@ -29,67 +29,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!verifyCsrfToken($csrfToken)) {
         $errors[] = 'Ongeldig verzoek. Probeer het opnieuw.';
-    }
+    } else {
+        $subject = trim($_POST['subject'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $category = trim($_POST['category'] ?? '');
 
-    $subject = trim($_POST['subject'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $category = trim($_POST['category'] ?? '');
+        if ($subject === '') {
+            $errors[] = 'Onderwerp is verplicht.';
+        } elseif (strlen($subject) > 150) {
+            $errors[] = 'Onderwerp mag maximaal 150 tekens bevatten.';
+        }
 
-    if ($subject === '') {
-        $errors[] = 'Onderwerp is verplicht.';
-    } elseif (strlen($subject) > 150) {
-        $errors[] = 'Onderwerp mag maximaal 150 tekens bevatten.';
-    }
+        if ($description === '') {
+            $errors[] = 'Omschrijving is verplicht.';
+        } elseif (strlen($description) > 2000) {
+            $errors[] = 'Omschrijving mag maximaal 2000 tekens bevatten.';
+        }
 
-    if ($description === '') {
-    $errors[] = 'Omschrijving is verplicht.';
-} elseif (strlen($description) > 2000) {
-    $errors[] = 'Omschrijving mag maximaal 2000 tekens bevatten.';
-}
+        if (!in_array($category, $allowedCategories, true)) {
+            $errors[] = 'Selecteer een geldige categorie.';
+        }
 
-    if (!in_array($category, $allowedCategories, true)) {
-        $errors[] = 'Selecteer een geldige categorie.';
-    }
+        if (empty($errors)) {
+            $stmt = $pdo->prepare(
+                'INSERT INTO tickets (
+                    user_id,
+                    subject,
+                    description,
+                    category
+                )
+                VALUES (
+                    :user_id,
+                    :subject,
+                    :description,
+                    :category
+                )'
+            );
 
-    if (empty($errors)) {
-        $stmt = $pdo->prepare(
-            'INSERT INTO tickets (
-                user_id,
-                subject,
-                description,
-                category
-            )
-            VALUES (
-                :user_id,
-                :subject,
-                :description,
-                :category
-            )'
-        );
+            $stmt->execute([
+                'user_id' => $_SESSION['user']['id'],
+                'subject' => $subject,
+                'description' => $description,
+                'category' => $category
+            ]);
 
-        $stmt->execute([
-            'user_id' => $_SESSION['user']['id'],
-            'subject' => $subject,
-            'description' => $description,
-            'category' => $category
-        ]);
-
-        header(
-            'Location: ' . BASE_URL . '/dashboard.php?created=1'
-        );
-        exit;
+            header(
+                'Location: ' . BASE_URL . '/dashboard.php?created=1'
+            );
+            exit;
+        }
     }
 }
 
 $csrfToken = generateCsrfToken();
-?>
-
-<?php
 
 $pageTitle = 'Nieuw ticket';
 
 require_once __DIR__ . '/../app/includes/header.php';
-
 ?>
 
 <div class="page-header">
@@ -124,7 +120,6 @@ require_once __DIR__ . '/../app/includes/header.php';
 
 <?php endif; ?>
 
-
 <section class="card">
 
     <h2 class="card-title">
@@ -157,7 +152,6 @@ require_once __DIR__ . '/../app/includes/header.php';
             >
 
         </div>
-
 
         <div class="form-group">
 
@@ -193,7 +187,6 @@ require_once __DIR__ . '/../app/includes/header.php';
 
         </div>
 
-
         <div class="form-group">
 
             <label for="description">
@@ -210,7 +203,6 @@ require_once __DIR__ . '/../app/includes/header.php';
             ><?= escape($description) ?></textarea>
 
         </div>
-
 
         <div class="form-actions">
 
