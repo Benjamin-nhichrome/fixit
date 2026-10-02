@@ -14,7 +14,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('employee', 'admin') NOT NULL DEFAULT 'employee',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- =========================
@@ -26,12 +26,18 @@ CREATE TABLE tickets (
     user_id INT UNSIGNED NOT NULL,
     subject VARCHAR(150) NOT NULL,
     description TEXT NOT NULL,
-    category VARCHAR(100) NOT NULL,
+    category ENUM(
+        'Hardware',
+        'Software',
+        'Account',
+        'Netwerk',
+        'Overig'
+    ) NOT NULL,
     status ENUM('Open', 'Closed') NOT NULL DEFAULT 'Open',
     priority ENUM('Low', 'Normal', 'Urgent') NOT NULL DEFAULT 'Normal',
     admin_note TEXT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_tickets_user
@@ -44,9 +50,7 @@ CREATE TABLE tickets (
 -- =========================
 -- TEST USERS
 -- =========================
--- Temporary test accounts.
--- Passwords will be replaced with secure password hashes
--- when we build the login system.
+-- Test accounts use bcrypt password hashes.
 
 INSERT INTO users (name, email, password, role) VALUES
 (
