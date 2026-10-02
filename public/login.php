@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($email === '' || $password === '') {
             $error = 'Vul je e-mailadres en wachtwoord in.';
+        } elseif (strlen($email) > 255) {
+            $error = 'E-mailadres mag maximaal 255 tekens bevatten.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = 'Vul een geldig e-mailadres in.';
         } else {
@@ -80,7 +82,6 @@ $csrfToken = generateCsrfToken();
 $pageTitle = 'Inloggen';
 
 require_once __DIR__ . '/../app/includes/header.php';
-
 ?>
 
 <div class="login-layout">
@@ -103,13 +104,13 @@ require_once __DIR__ . '/../app/includes/header.php';
 
         <form method="POST" action="">
 
-    <input
-        type="hidden"
-        name="csrf_token"
-        value="<?= escape($csrfToken) ?>"
-    >
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?= escape($csrfToken) ?>"
+            >
 
-    <div class="form-group"></div>
+            <div class="form-group">
 
                 <label for="email">
                     E-mailadres
@@ -120,6 +121,7 @@ require_once __DIR__ . '/../app/includes/header.php';
                     type="email"
                     id="email"
                     name="email"
+                    maxlength="255"
                     autocomplete="email"
                     required
                 >
