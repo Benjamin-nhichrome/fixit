@@ -124,41 +124,24 @@ require_once __DIR__ . '/../app/includes/header.php';
                         </td>
 
                         <td>
+    <span
+        class="badge <?= getStatusBadgeClass(
+            $ticket['status']
+        ) ?>"
+    >
+        <?= escape($ticket['status']) ?>
+    </span>
+</td>
 
-                            <?php
-                            $statusClass =
-                                $ticket['status'] === 'Open'
-                                    ? 'badge-open'
-                                    : 'badge-closed';
-                            ?>
-
-                            <span
-                                class="badge <?= $statusClass ?>"
-                            >
-                                <?= escape($ticket['status']) ?>
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <?php
-                            $priorityClass = match (
-                                $ticket['priority']
-                            ) {
-                                'Low' => 'badge-low',
-                                'Urgent' => 'badge-urgent',
-                                default => 'badge-normal'
-                            };
-                            ?>
-
-                            <span
-                                class="badge <?= $priorityClass ?>"
-                            >
-                                <?= escape($ticket['priority']) ?>
-                            </span>
-
-                        </td>
+<td>
+    <span
+        class="badge <?= getPriorityBadgeClass(
+            $ticket['priority']
+        ) ?>"
+    >
+        <?= escape($ticket['priority']) ?>
+    </span>
+</td>
 
                         <td>
                             <?= escape(

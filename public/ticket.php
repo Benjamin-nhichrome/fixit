@@ -50,24 +50,10 @@ if (!$ticket) {
     http_response_code(404);
     exit('Ticket niet gevonden.');
 }
-?>
-
-<?php
 
 $pageTitle = 'Ticket #' . (int) $ticket['id'];
 
 require_once __DIR__ . '/../app/includes/header.php';
-
-$statusClass = $ticket['status'] === 'Open'
-    ? 'badge-open'
-    : 'badge-closed';
-
-$priorityClass = match ($ticket['priority']) {
-    'Low' => 'badge-low',
-    'Urgent' => 'badge-urgent',
-    default => 'badge-normal'
-};
-
 ?>
 
 <div class="page-header">
@@ -82,10 +68,8 @@ $priorityClass = match ($ticket['priority']) {
 
 </div>
 
-
 <div class="ticket-layout">
 
-    <!-- LEFT SIDE -->
     <div>
 
         <section class="card">
@@ -109,7 +93,6 @@ $priorityClass = match ($ticket['priority']) {
                     </p>
 
                 </div>
-
 
                 <div class="detail-item">
 
@@ -142,8 +125,6 @@ $priorityClass = match ($ticket['priority']) {
 
     </div>
 
-
-    <!-- RIGHT SIDE -->
     <aside>
 
         <section class="card">
@@ -160,12 +141,15 @@ $priorityClass = match ($ticket['priority']) {
                         Status
                     </span>
 
-                    <span class="badge <?= $statusClass ?>">
+                    <span
+                        class="badge <?= getStatusBadgeClass(
+                            $ticket['status']
+                        ) ?>"
+                    >
                         <?= escape($ticket['status']) ?>
                     </span>
 
                 </div>
-
 
                 <div class="detail-item">
 
@@ -173,12 +157,15 @@ $priorityClass = match ($ticket['priority']) {
                         Prioriteit
                     </span>
 
-                    <span class="badge <?= $priorityClass ?>">
+                    <span
+                        class="badge <?= getPriorityBadgeClass(
+                            $ticket['priority']
+                        ) ?>"
+                    >
                         <?= escape($ticket['priority']) ?>
                     </span>
 
                 </div>
-
 
                 <div class="detail-item">
 
@@ -189,7 +176,6 @@ $priorityClass = match ($ticket['priority']) {
                     <?= escape($ticket['category']) ?>
 
                 </div>
-
 
                 <div class="detail-item">
 
@@ -205,7 +191,6 @@ $priorityClass = match ($ticket['priority']) {
                     ) ?>
 
                 </div>
-
 
                 <div class="detail-item">
 
@@ -229,7 +214,6 @@ $priorityClass = match ($ticket['priority']) {
     </aside>
 
 </div>
-
 
 <div class="form-actions">
 

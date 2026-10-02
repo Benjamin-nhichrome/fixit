@@ -19,3 +19,19 @@ function escape(string $value): string
 {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
+
+function getStatusBadgeClass(string $status): string
+{
+    return $status === 'Open'
+        ? 'badge-open'
+        : 'badge-closed';
+}
+
+function getPriorityBadgeClass(string $priority): string
+{
+    return match ($priority) {
+        'Low' => 'badge-low',
+        'Urgent' => 'badge-urgent',
+        default => 'badge-normal'
+    };
+}
